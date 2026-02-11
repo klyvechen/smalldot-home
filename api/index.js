@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 // 接收 Telegram 訊息的路由
-app.post('/api/index', async (req, res) => {
+app.post('/api/askbot', async (req, res) => {
   // --- 新增：除錯專用 Log ---
   console.log("===== 收到新的請求 =====");
   console.log("Headers:", JSON.stringify(req.headers, null, 2));
