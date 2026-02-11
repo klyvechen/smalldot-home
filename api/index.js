@@ -4,9 +4,19 @@ const app = express();
 
 app.use(express.json());
 
-// 從 Vercel 的 Environment Variables 讀取你的 Token
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token);
+
+// --- 新增：處理瀏覽器 GET 請求 ---
+app.get('/', (req, res) => {
+  res.status(200).send(`
+    <h1>🤖 交易助理已啟動</h1>
+    <p>伺服器狀態：正常 (Running on Vercel)</p>
+    <p>本地測試請使用 POST 指令。</p>
+    <hr>
+    <small>最後更新時間：${new Date().toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'})}</small>
+  `);
+});
 
 // 接收 Telegram 訊息的路由
 app.post('/api/index', async (req, res) => {
@@ -24,7 +34,7 @@ app.post('/api/index', async (req, res) => {
         await bot.sendMessage(chatId, `收到訊息：${text}`);
       }
     }
-    
+
     res.status(200).send('OK'); // 必須回傳 200 告訴 Telegram 訊息已收到
   } catch (error) {
     console.error(error);
@@ -32,5 +42,4 @@ app.post('/api/index', async (req, res) => {
   }
 });
 
-// 匯出 Express App 給 Vercel 執行
 module.exports = app;
